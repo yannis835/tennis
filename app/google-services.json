@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "603525599404",
+    "firebase_url": "https://module2androidstudio-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "module2androidstudio",
+    "storage_bucket": "module2androidstudio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603525599404:android:4a1028208e5c8f2c288f09",
+        "android_client_info": {
+          "package_name": "com.example.module2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603525599404-7crv03komme7ep0s3r5j0le2l8pahn47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJMdCFNPm3LH__xiBAjbsNXG0mIsc0H2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603525599404-7crv03komme7ep0s3r5j0le2l8pahn47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603525599404:android:31fd95a1cdac8350288f09",
+        "android_client_info": {
+          "package_name": "com.example.tennis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603525599404-7crv03komme7ep0s3r5j0le2l8pahn47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJMdCFNPm3LH__xiBAjbsNXG0mIsc0H2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603525599404-7crv03komme7ep0s3r5j0le2l8pahn47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
