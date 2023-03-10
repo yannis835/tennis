@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".ReservationActivity">
 
     <CalendarView
@@ -31,7 +32,7 @@
         android:id="@+id/saveData"
         android:layout_width="383dp"
         android:layout_height="49dp"
-        android:text="Reservation"
+        android:text="Reserver"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

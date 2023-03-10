@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".HomeActivity">
 
     <TextView
@@ -47,10 +48,10 @@
         android:text="Infos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reservation2"
-        app:layout_constraintVertical_bias="0.329" />
+        app:layout_constraintVertical_bias="0.401" />
 
     <Button
         android:id="@+id/reservation2"
@@ -61,5 +62,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reservation1"
-        app:layout_constraintVertical_bias="0.281" />
+        app:layout_constraintVertical_bias="0.27" />
 </androidx.constraintlayout.widget.ConstraintLayout>
