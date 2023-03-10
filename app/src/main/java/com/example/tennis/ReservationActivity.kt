@@ -48,6 +48,20 @@ class ReservationActivity : AppCompatActivity() {
         calendarView.maxDate = calendar.timeInMillis
 
         timePicker.setIs24HourView(true)
+        timePicker.setIs24HourView(true)
+        timePicker.hour = 22
+        timePicker.minute = 0
+        timePicker.setOnTimeChangedListener { _, hourOfDay, _ ->
+            if (hourOfDay < 7) {
+                timePicker.hour = 7
+                timePicker.minute = 0
+            } else if (hourOfDay > 22) {
+                timePicker.hour = 22
+                timePicker.minute = 0
+            }
+        }
+
+
 
         saveDataButton.setOnClickListener {
             val date = calendarView.date
