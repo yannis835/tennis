@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReservationActivity">
+    tools:context=".ReservationActivity2">
 
     <CalendarView
         android:id="@+id/terrain2"
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePicker2"
         android:layout_width="400dp"
         android:layout_height="342dp"
         app:layout_constraintBottom_toTopOf="@+id/saveData"
