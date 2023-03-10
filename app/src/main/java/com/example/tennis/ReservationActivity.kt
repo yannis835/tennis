@@ -24,7 +24,6 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var timePicker: TimePicker
     private lateinit var calendarView: CalendarView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
@@ -36,18 +35,19 @@ class ReservationActivity : AppCompatActivity() {
             val uid = currentUser.uid
             database.child("users").child(uid).child("email").setValue(email)
         }
-        //recuperation des elements de la vue
+
+        // Récupération des éléments de la vue
         calendarView = findViewById(R.id.terrain2)
         timePicker = findViewById(R.id.timePicker)
         saveDataButton = findViewById(R.id.saveData)
 
-
+        // Définition des limites de date pour le CalendarView
         val calendar = Calendar.getInstance()
         calendarView.minDate = calendar.timeInMillis
         calendar.add(Calendar.DAY_OF_MONTH, 7)
         calendarView.maxDate = calendar.timeInMillis
 
-        timePicker.setIs24HourView(true)
+        // Définition des limites d'heure pour le TimePicker
         timePicker.setIs24HourView(true)
         timePicker.hour = 22
         timePicker.minute = 0
@@ -61,22 +61,31 @@ class ReservationActivity : AppCompatActivity() {
             }
         }
 
-
-
         saveDataButton.setOnClickListener {
             val date = calendarView.date
             val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(date))
             val hour = timePicker.hour
             val terrain = "terrain1"
-            if (currentUser != null) {
-                database.child("users").child(currentUser.uid).child("date").setValue(dateString)
-                database.child("users").child(currentUser.uid).child("hour").setValue(hour)
-                database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
-            }
-            Toast.makeText(this, "Terrain 1 Reserved", Toast.LENGTH_SHORT).show()
-            intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
 
+            // Vérification si le jour sélectionné est un samedi
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = date
+            val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
+
+            // Vérification des limites d'heure pour le samedi
+            val isSaturdayBetween10and18 = dayOfWeek == Calendar.SATURDAY && hour >= 10 && hour < 18
+            if (isSaturdayBetween10and18) {
+                Toast.makeText(this, "Impossible de réserver entre 10h et 18h le samedi", Toast.LENGTH_SHORT).show()
+            } else {
+                if (currentUser != null) {
+                    database.child("users").child(currentUser.uid).child("date").setValue(dateString)
+                    database.child("users").child(currentUser.uid).child("hour").setValue(hour)
+                    database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+                }
+                Toast.makeText(this, "Terrain 1 réservé", Toast.LENGTH_SHORT).show()
+                intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 }
