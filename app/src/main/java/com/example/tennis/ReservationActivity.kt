@@ -3,6 +3,7 @@ package com.example.tennis
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TimePicker
@@ -21,8 +22,9 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var saveDataButton: Button
-    private lateinit var timePicker: TimePicker
-    private lateinit var calendarView: CalendarView
+    private lateinit var timePicker1: TimePicker
+    private lateinit var calendarView1: CalendarView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,25 +39,48 @@ class ReservationActivity : AppCompatActivity() {
             database.child("users").child(uid).child("email").setValue(email)
         }
         //recuperation des elements de la vue
-        calendarView = findViewById(R.id.terrain2)
-        timePicker = findViewById(R.id.timePicker)
+        calendarView1 = findViewById(R.id.terrain1)
+        timePicker1 = findViewById(R.id.timePicker1)
         saveDataButton = findViewById(R.id.saveData)
 
 
+        //definition des limites du calendrier
         val calendar = Calendar.getInstance()
-        calendarView.minDate = calendar.timeInMillis
+        calendarView1.minDate = calendar.timeInMillis
         calendar.add(Calendar.DAY_OF_MONTH, 7)
-        calendarView.maxDate = calendar.timeInMillis
+        calendarView1.maxDate = calendar.timeInMillis
 
-        timePicker.setIs24HourView(true)
+
+        // Définition des limites d'heure pour le TimePicker
+        timePicker1.setIs24HourView(true)
+        timePicker1.hour = 22
+        timePicker1.minute = 0
+        timePicker1.setOnTimeChangedListener { _, hourOfDay, _ ->
+            if (hourOfDay < 7) {
+                timePicker1.hour = 7
+                timePicker1.minute = 0
+            } else if (hourOfDay > 22) {
+                timePicker1.hour = 22
+                timePicker1.minute = 0
+            }
+        }
+
+        calendarView1.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            // Mise à jour de la date dans le calendrier
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+        }
 
         saveDataButton.setOnClickListener {
-            val date = calendarView.date
-            val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(date))
-            val hour = timePicker.hour
+            // Récupération de la date sélectionnée sous string
+            val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            Log.d("date", selectedDate)
+            val hour = timePicker1.hour
             val terrain = "terrain1"
             if (currentUser != null) {
-                database.child("users").child(currentUser.uid).child("date").setValue(dateString)
+                database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
                 database.child("users").child(currentUser.uid).child("hour").setValue(hour)
                 database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
             }

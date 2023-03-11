@@ -7,7 +7,7 @@
     tools:context=".ReservationActivity">
 
     <CalendarView
-        android:id="@+id/terrain2"
+        android:id="@+id/terrain1"
         android:layout_width="404dp"
         android:layout_height="292dp"
         android:layout_marginTop="36dp"
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date Reservation terrain 1"
-        app:layout_constraintBottom_toTopOf="@+id/terrain2"
+        app:layout_constraintBottom_toTopOf="@+id/terrain1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,14 +37,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePicker1"
         android:layout_width="400dp"
         android:layout_height="342dp"
         app:layout_constraintBottom_toTopOf="@+id/saveData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/terrain2"
+        app:layout_constraintTop_toBottomOf="@+id/terrain1"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
