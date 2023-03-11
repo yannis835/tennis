@@ -25,8 +25,6 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var timePicker1: TimePicker
     private lateinit var calendarView1: CalendarView
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
@@ -38,18 +36,17 @@ class ReservationActivity : AppCompatActivity() {
             val uid = currentUser.uid
             database.child("users").child(uid).child("email").setValue(email)
         }
+
         //recuperation des elements de la vue
         calendarView1 = findViewById(R.id.terrain1)
         timePicker1 = findViewById(R.id.timePicker1)
         saveDataButton = findViewById(R.id.saveData)
-
 
         //definition des limites du calendrier
         val calendar = Calendar.getInstance()
         calendarView1.minDate = calendar.timeInMillis
         calendar.add(Calendar.DAY_OF_MONTH, 7)
         calendarView1.maxDate = calendar.timeInMillis
-
 
         // Définition des limites d'heure pour le TimePicker
         timePicker1.setIs24HourView(true)
@@ -74,20 +71,25 @@ class ReservationActivity : AppCompatActivity() {
         }
 
         saveDataButton.setOnClickListener {
-            // Récupération de la date sélectionnée sous string
-            val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-            Log.d("date", selectedDate)
+            // Vérification de la date sélectionnée
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
             val hour = timePicker1.hour
             val terrain = "terrain1"
-            if (currentUser != null) {
-                database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
-                database.child("users").child(currentUser.uid).child("hour").setValue(hour)
-                database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+            if (dayOfWeek == Calendar.SATURDAY && hour >= 10 && hour < 18) {
+                Toast.makeText(this, "Réservation impossible le samedi entre 10h et 18h", Toast.LENGTH_SHORT).show()
+            } else {
+                // Récupération de la date sélectionnée sous string
+                val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                Log.d("date", selectedDate)
+                if (currentUser != null) {
+                    database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
+                    database.child("users").child(currentUser.uid).child("hour").setValue(hour)
+                    database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+                }
+                Toast.makeText(this, "Terrain 1 Reservé", Toast.LENGTH_SHORT).show()
+                intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
             }
-            Toast.makeText(this, "Terrain 1 Reserved", Toast.LENGTH_SHORT).show()
-            intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
         }
-
     }
 }

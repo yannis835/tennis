@@ -4,6 +4,7 @@ package com.example.tennis
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TimePicker
@@ -69,19 +70,25 @@ class ReservationActivity2 : AppCompatActivity() {
         }
 
         saveDataButton.setOnClickListener {
-            // Récupération de la date sélectionnée sous string
-            val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            // Vérification de la date sélectionnée
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
             val hour = timePicker2.hour
-            val terrain = "terrain2"
-            if (currentUser != null) {
-                database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
-                database.child("users").child(currentUser.uid).child("hour").setValue(hour)
-                database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+            val terrain = "terrain1"
+            if (dayOfWeek == Calendar.SATURDAY && hour >= 10 && hour < 18) {
+                Toast.makeText(this, "Réservation impossible le samedi entre 10h et 18h", Toast.LENGTH_SHORT).show()
+            } else {
+                // Récupération de la date sélectionnée sous string
+                val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                Log.d("date", selectedDate)
+                if (currentUser != null) {
+                    database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
+                    database.child("users").child(currentUser.uid).child("hour").setValue(hour)
+                    database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+                }
+                Toast.makeText(this, "Terrain 2 Reservé", Toast.LENGTH_SHORT).show()
+                intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
             }
-            Toast.makeText(this, "Terrain 2 Reserved", Toast.LENGTH_SHORT).show()
-            intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
         }
-
     }
 }
