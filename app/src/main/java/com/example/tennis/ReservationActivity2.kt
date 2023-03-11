@@ -130,6 +130,8 @@ class ReservationActivity2 : AppCompatActivity() {
                             .setTitle("Réservation")
                             .setItems(hourOptions) { _, index ->
                                 val selectedHour = index + 1
+                                Log.d("selectedHour", selectedHour.toString()) // afficher la valeur de selectedHour dans les logs
+                                database.child("users").child(currentUser.uid).child("duration").setValue(selectedHour)
                                 Toast.makeText(
                                     this,
                                     "Terrain 2 réservé pour $selectedHour heure(s)",
@@ -143,5 +145,8 @@ class ReservationActivity2 : AppCompatActivity() {
                 }
             }
         }
+
+
+
     }
 }
