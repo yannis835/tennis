@@ -147,8 +147,6 @@ class ReservationActivity : AppCompatActivity() {
                 }
             }
         }
-
-
-
     }
 }
+
