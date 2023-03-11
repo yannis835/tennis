@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_orange_dark"
+    android:background="@color/black"
     android:backgroundTint="@android:color/holo_orange_dark"
     tools:context=".ReservationActivity">
 
@@ -15,10 +15,10 @@
         android:layout_marginTop="36dp"
         android:backgroundTint="@android:color/holo_orange_dark"
         android:focusedMonthDateColor="@android:color/holo_orange_dark"
-        android:foregroundTint="@android:color/holo_orange_dark"
-        android:selectedDateVerticalBar="@android:color/holo_orange_dark"
-        android:selectedWeekBackgroundColor="@android:color/holo_orange_dark"
-        android:unfocusedMonthDateColor="@android:color/holo_orange_dark"
+        android:foregroundTint="@color/black"
+        android:selectedDateVerticalBar="@color/black"
+        android:selectedWeekBackgroundColor="@color/black"
+        android:unfocusedMonthDateColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
