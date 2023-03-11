@@ -1,10 +1,12 @@
 package com.example.tennis
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,6 +21,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var reservation2Button: Button
     private lateinit var infosButton: Button
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -37,8 +40,11 @@ class HomeActivity : AppCompatActivity() {
         reservation1Button = findViewById(R.id.reservation1)
         reservation2Button = findViewById(R.id.reservation2)
 
+
+
         reservation1Button.setOnClickListener {
             val intent = Intent(this, ReservationActivity::class.java)
+
             startActivity(intent)
         }
         reservation2Button.setOnClickListener {

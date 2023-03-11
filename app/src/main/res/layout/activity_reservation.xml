@@ -29,22 +29,25 @@
 
     <Button
         android:id="@+id/saveData"
-        android:layout_width="383dp"
-        android:layout_height="49dp"
+        android:layout_width="394dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="16dp"
         android:text="Reservation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TimePicker
         android:id="@+id/timePicker1"
-        android:layout_width="400dp"
-        android:layout_height="342dp"
+        android:layout_width="389dp"
+        android:layout_height="344dp"
         app:layout_constraintBottom_toTopOf="@+id/saveData"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/terrain1"
         app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

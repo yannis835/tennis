@@ -1,13 +1,12 @@
 package com.example.tennis
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.CalendarView
-import android.widget.TimePicker
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -24,7 +23,11 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var saveDataButton: Button
     private lateinit var timePicker1: TimePicker
     private lateinit var calendarView1: CalendarView
+    private lateinit var radioGroup: RadioGroup
+    private lateinit var radioButton1: RadioButton
+    private lateinit var radioButton2: RadioButton
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
@@ -41,6 +44,7 @@ class ReservationActivity : AppCompatActivity() {
         calendarView1 = findViewById(R.id.terrain1)
         timePicker1 = findViewById(R.id.timePicker1)
         saveDataButton = findViewById(R.id.saveData)
+
 
         //definition des limites du calendrier
         val calendar = Calendar.getInstance()
@@ -75,21 +79,57 @@ class ReservationActivity : AppCompatActivity() {
             val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
             val hour = timePicker1.hour
             val terrain = "terrain1"
+
             if (dayOfWeek == Calendar.SATURDAY && hour >= 10 && hour < 18) {
-                Toast.makeText(this, "Réservation impossible le samedi entre 10h et 18h", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Réservation impossible le samedi entre 10h et 18h",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (hour >= 22) {
+                    Toast.makeText(
+                        this,
+                        "Réservation impossible après 22h",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
             } else {
-                // Récupération de la date sélectionnée sous string
-                val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-                Log.d("date", selectedDate)
-                if (currentUser != null) {
-                    database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
-                    database.child("users").child(currentUser.uid).child("hour").setValue(hour)
-                    database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+                // Création d'une boîte de dialogue pour choisir la durée de la réservation
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Choisir la durée de la réservation")
+                val durations = arrayOf("1 heure", "2 heures maximum")
+                builder.setItems(durations) { _, which ->
+                    val duration = when (which) {
+                        0 -> 1
+                        1 -> 2
+                        else -> 1
+                    }
+
+                    // Récupération de la date sélectionnée sous string
+                    val selectedDate =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                    Log.d("date", selectedDate)
+                    if (currentUser != null) {
+                        database.child("users").child(currentUser.uid).child("date")
+                            .setValue(selectedDate)
+                        database.child("users").child(currentUser.uid).child("hour").setValue(hour)
+                        database.child("users").child(currentUser.uid).child("duration")
+                            .setValue(duration)
+                        database.child("users").child(currentUser.uid).child("terrain")
+                            .setValue(terrain)
+                    }
+                    Toast.makeText(
+                        this,
+                        "Terrain 1 réservé pour $duration heure(s)",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
                 }
-                Toast.makeText(this, "Terrain 1 Reservé", Toast.LENGTH_SHORT).show()
-                intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
+                    builder.show()
+                }
             }
         }
     }
-}
+
