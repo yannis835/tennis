@@ -24,8 +24,6 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var timePicker1: TimePicker
     private lateinit var calendarView1: CalendarView
     private lateinit var radioGroup: RadioGroup
-    private lateinit var radioButton1: RadioButton
-    private lateinit var radioButton2: RadioButton
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,50 +84,66 @@ class ReservationActivity : AppCompatActivity() {
                     "Réservation impossible le samedi entre 10h et 18h",
                     Toast.LENGTH_SHORT
                 ).show()
+
             } else if (hour >= 22) {
-                    Toast.makeText(
-                        this,
-                        "Réservation impossible après 22h",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                Toast.makeText(
+                    this,
+                    "Le club ferme à 22h, veuillez sélectionner une heure avant 22h",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-                // Création d'une boîte de dialogue pour choisir la durée de la réservation
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Choisir la durée de la réservation")
-                val durations = arrayOf("1 heure", "2 heures maximum")
-                builder.setItems(durations) { _, which ->
-                    val duration = when (which) {
-                        0 -> 1
-                        1 -> 2
-                        else -> 1
-                    }
+                // Récupération de la date sélectionnée sous string
+                val selectedDate =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                Log.d("date", selectedDate)
 
-                    // Récupération de la date sélectionnée sous string
-                    val selectedDate =
-                        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-                    Log.d("date", selectedDate)
-                    if (currentUser != null) {
-                        database.child("users").child(currentUser.uid).child("date")
-                            .setValue(selectedDate)
-                        database.child("users").child(currentUser.uid).child("hour").setValue(hour)
-                        database.child("users").child(currentUser.uid).child("duration")
-                            .setValue(duration)
-                        database.child("users").child(currentUser.uid).child("terrain")
-                            .setValue(terrain)
+                if (currentUser != null) {
+                    database.child("users").child(currentUser.uid).child("date")
+                        .setValue(selectedDate)
+                    database.child("users").child(currentUser.uid).child("hour").setValue(hour)
+
+                    database.child("users").child(currentUser.uid).child("terrain")
+                        .setValue(terrain)
+
+                    if (hour >= 21 || dayOfWeek == Calendar.SATURDAY && hour >= 9 ) {
+                        AlertDialog.Builder(this)
+                            .setTitle("Réservation")
+                            .setMessage("Voulez-vous réserver pour 1h ou 2h ?")
+                            .setPositiveButton("1h") { _, _ ->
+                                Toast.makeText(
+                                    this,
+                                    "Terrain 1 réservé pour 1 heure",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                            }
+                            .setNegativeButton("2h") { _, _ ->
+                                Toast.makeText(
+                                    this,
+                                    "Réservation impossible pour 2h après 21h",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .show()
+                    } else {
+                        val hourOptions = arrayOf("1h", "2h")
+                        AlertDialog.Builder(this)
+                            .setTitle("Réservation")
+                            .setItems(hourOptions) { _, index ->
+                                val selectedHour = index + 1
+                                Toast.makeText(
+                                    this,
+                                    "Terrain 1 réservé pour $selectedHour heure(s)",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                            }
+                            .show()
                     }
-                    Toast.makeText(
-                        this,
-                        "Terrain 1 réservé pour $duration heure(s)",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                }
-                    builder.show()
                 }
             }
         }
     }
-
+}
