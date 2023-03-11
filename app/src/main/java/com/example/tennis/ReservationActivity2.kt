@@ -4,10 +4,12 @@ package com.example.tennis
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ktx.database
@@ -69,19 +71,82 @@ class ReservationActivity2 : AppCompatActivity() {
         }
 
         saveDataButton.setOnClickListener {
-            // Récupération de la date sélectionnée sous string
-            val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            // Vérification de la date sélectionnée
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
             val hour = timePicker2.hour
             val terrain = "terrain2"
-            if (currentUser != null) {
-                database.child("users").child(currentUser.uid).child("date").setValue(selectedDate)
-                database.child("users").child(currentUser.uid).child("hour").setValue(hour)
-                database.child("users").child(currentUser.uid).child("terrain").setValue(terrain)
+
+            if (dayOfWeek == Calendar.SATURDAY && hour >= 10 && hour < 18) {
+                Toast.makeText(
+                    this,
+                    "Réservation impossible le samedi entre 10h et 18h",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } else if (hour >= 22) {
+                Toast.makeText(
+                    this,
+                    "Le club ferme à 22h, veuillez sélectionner une heure avant 22h",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                // Récupération de la date sélectionnée sous string
+                val selectedDate =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                Log.d("date", selectedDate)
+
+                if (currentUser != null) {
+                    database.child("users").child(currentUser.uid).child("date")
+                        .setValue(selectedDate)
+                    database.child("users").child(currentUser.uid).child("hour").setValue(hour)
+
+                    database.child("users").child(currentUser.uid).child("terrain")
+                        .setValue(terrain)
+
+                    if (hour >= 21 || dayOfWeek == Calendar.SATURDAY && hour >= 9 ) {
+                        AlertDialog.Builder(this)
+                            .setTitle("Réservation")
+                            .setMessage("Voulez-vous réserver pour 1h ou 2h ?")
+                            .setPositiveButton("1h") { _, _ ->
+                                Toast.makeText(
+                                    this,
+                                    "Terrain 2 réservé pour 1 heure",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                            }
+                            .setNegativeButton("2h") { _, _ ->
+                                Toast.makeText(
+                                    this,
+                                    "Réservation impossible pour 2h après 21h",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .show()
+                    } else {
+                        val hourOptions = arrayOf("1h", "2h")
+                        AlertDialog.Builder(this)
+                            .setTitle("Réservation")
+                            .setItems(hourOptions) { _, index ->
+                                val selectedHour = index + 1
+                                Log.d("selectedHour", selectedHour.toString()) // afficher la valeur de selectedHour dans les logs
+                                database.child("users").child(currentUser.uid).child("duration").setValue(selectedHour)
+                                Toast.makeText(
+                                    this,
+                                    "Terrain 2 réservé pour $selectedHour heure(s)",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                            }
+                            .show()
+                    }
+                }
             }
-            Toast.makeText(this, "Terrain 2 Reserved", Toast.LENGTH_SHORT).show()
-            intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
         }
+
+
 
     }
 }
